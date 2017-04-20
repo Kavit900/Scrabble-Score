@@ -1,7 +1,7 @@
 //
 // # Scrabble Count Server
 //
-// @author Kavit Mehta
+// @author Kavit Mehta (zenwraight)
 //
 var http = require('http');
 var express = require('express');
@@ -54,7 +54,7 @@ router.get('/', function(req, res, next){
 router.post('/', function(req, res) {
    var scrabble_letters = req.body.message.split(',');
    var render_template = __dirname + '/public/result.ejs';
-   console.log(trie.countWords());
+   
    /*
    Let's validate our input:-
    1. All letters should be of size one - you cannot enter AA,B,C (wrong type of input)
@@ -64,17 +64,20 @@ router.post('/', function(req, res) {
    var letter_size_flag = false;
    var letter_lower_case_flag = false;
    for(var i=0; i < scrabble_letters.length; i++) {
-      console.log(scrabble_letters[i]);
       if(scrabble_letters[i].length > 1) {
          letter_size_flag = true;
          break;
+      }
+      var asciss_val = scrabble_letters[i].charCodeAt(0);
+      if (asciss_val < 65 || asciss_val > 90) {
+         letter_lower_case_flag = true;
       }
    }
    
    if(letter_size_flag) {
       res.render(render_template, {letter_size_flag: true, error_message: 'Your each letter size should be one', success: false});
    } else if(letter_lower_case_flag) {
-      res.render(render_template, {letter_size_flag: true, error_message: 'Your each letter should be in Upper Case only', success: false});
+      res.render(render_template, {letter_size_flag: true, error_message: 'Your each letter should be in Upper Case only i.e between A-Z', success: false});
    } else {
       res.render(render_template, {result: req.body.message, success: true});
    }
