@@ -127,17 +127,19 @@ Trie.prototype._contains = function(node, word) {
 // no null validations required as child should be present
 Trie.prototype.findWordScore = function(word) {
   if(!this.root) {
-    return null;
+    return -10005;
   }
+  console.log('I am inside');
   return this._findWordScore(this.root, word, 0);
 };
 Trie.prototype._findWordScore = function(node, word, score) {
   if(!node || !word) {
-    return -10005;
+    return score;
   }
   
   var letter = word.charAt(0);
   var child = node.children[letter];
+  var max_score = score;
   if(child) {
     var remainder = word.substring(1);
     if(!remainder && child.isWord) {
@@ -145,9 +147,8 @@ Trie.prototype._findWordScore = function(node, word, score) {
     } else {
       return this._contains(child, word, child.score + score);
     }
-  } else {
-    return false;
   }
+  return score;
 };
 Trie.prototype.countWords = function() {
   if(!this.root) {
