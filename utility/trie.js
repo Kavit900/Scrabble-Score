@@ -1,4 +1,6 @@
 // We will export all the Trie related classes from this file
+
+// Trie class - using my own class instead of using merkle trie provided by npm
 function Node(data) {
   this.data = data;
   this.isWord = false;

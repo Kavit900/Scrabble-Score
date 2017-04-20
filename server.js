@@ -1,7 +1,7 @@
 //
-// # SimpleServer
+// # Scrabble Count Server
 //
-// A simple chat server using Socket.IO, Express, and Async.
+// @author Kavit Mehta
 //
 var http = require('http');
 var express = require('express');
