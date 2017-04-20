@@ -5,6 +5,12 @@
   <title>Scrabble Score - Results</title>
 </head>
 <body>
-    <span><%= result %></span>
+    <%if (success) { %>
+      <span><%= result %></span>
+    <% } else { %>
+      <% if (letter_size_flag) { %>
+        <span><%= error_message %></span>
+      <% } %>
+    <% } %>
 </body>
 </html>

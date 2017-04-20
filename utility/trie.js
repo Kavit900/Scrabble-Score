@@ -1,11 +1,42 @@
 // We will export all the Trie related classes from this file
 
+// Individual letter scores 
+var letter_score = {
+    A: 1,
+    B: 3,
+    C: 3,
+    D: 2,
+    E: 1,
+    F: 4,
+    G: 2,
+    H: 4,
+    I: 1,
+    J: 8,
+    K: 5,
+    L: 1,
+    M: 3,
+    N: 1,
+    O: 1,
+    P: 3,
+    Q: 10,
+    R: 1,
+    S: 1,
+    T: 1,
+    U: 1,
+    V: 4,
+    W: 4,
+    X: 8,
+    Y: 4,
+    Z: 10
+}
+
 // Trie class - using my own class instead of using merkle trie provided by npm
 function Node(data) {
   this.data = data;
   this.isWord = false;
   this.prefixes = 0;
   this.children = {};
+  this.score = 0;
 }
 
 function Trie() {
@@ -16,9 +47,9 @@ Trie.prototype.add = function(word) {
   if(!this.root) {
     return null;
   }
-  this._addNode(this.root, word);
+  this._addNode(this.root, word, 0);
 };
-Trie.prototype._addNode = function(node, word) {
+Trie.prototype._addNode = function(node, word, score) {
   if(!node || !word) {
     return null;
   }
@@ -28,12 +59,13 @@ Trie.prototype._addNode = function(node, word) {
   if(!child) {
     child = new Node(letter);
     node.children[letter] = child;
+    node.score = score + letter_score[child];
   }
   var remainder = word.substring(1);
   if(!remainder) {
     child.isWord = true;
   }
-  this._addNode(child, remainder);
+  this._addNode(child, remainder, score);
 };
 Trie.prototype.remove = function(word) {
   if(!this.root) {
@@ -86,6 +118,32 @@ Trie.prototype._contains = function(node, word) {
       return true;
     } else {
       return this._contains(child, remainder);
+    }
+  } else {
+    return false;
+  }
+};
+
+// no null validations required as child should be present
+Trie.prototype.findWordScore = function(word) {
+  if(!this.root) {
+    return null;
+  }
+  return this._findWordScore(this.root, word, 0);
+};
+Trie.prototype._findWordScore = function(node, word, score) {
+  if(!node || !word) {
+    return -10005;
+  }
+  
+  var letter = word.charAt(0);
+  var child = node.children[letter];
+  if(child) {
+    var remainder = word.substring(1);
+    if(!remainder && child.isWord) {
+      return score;
+    } else {
+      return this._contains(child, word, child.score + score);
     }
   } else {
     return false;
