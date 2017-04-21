@@ -105,6 +105,7 @@ router.post('/', function(req, res) {
       var str_permut = permut(res_str);
       for(var i=0; i<str_permut.length; i++) {
          if(trie.contains(str_permut[i])) {
+            console.log(str_permut[i]);
             max_score_achieved = Math.max(max_score_achieved, trie.findWordScore(str_permut[i]));
          }
       }
